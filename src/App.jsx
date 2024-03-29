@@ -1,7 +1,7 @@
 
 import './App.css'
 import { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import NotFoundPage from './pages/NotFoundPage';
 import HomePage from './pages/HomePage';
@@ -12,7 +12,7 @@ function App() {
  
 
   return (
-     <Router>
+     <BrowserRouter>
       <Navigation />
       <Suspense fallback={<div>Loading...</div>}>
         <Switch>
@@ -22,7 +22,7 @@ function App() {
           <Route component={NotFoundPage} />
         </Switch>
       </Suspense>
-    </Router>
+    </BrowserRouter>
   )
 }
 
