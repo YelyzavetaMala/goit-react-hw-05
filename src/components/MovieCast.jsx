@@ -1,57 +1,46 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import css from "../MovieCast/MovieCast.module.css";
-import { instance, options } from "../../url";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
-import CastCard from "../CastCard/CastCard";
-import Loader from "../Loader/Loader";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const MovieCast = () => {
-	const [castValue, setCastValue] = useState(null);
-	const [isError, setIsError] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const { movieId } = useParams();
+function MovieCast({ movieId }) {
+  const [cast, setCast] = useState([]);
 
-	useEffect(() => {
-		async function fetchCast() {
-			setCastValue(null);
-			setIsError(false);
-			setIsLoading(true);
-			try {
-				const { data } = await instance.get(`movie/${movieId}/credits`, options);
-				setCastValue(data.cast);
-			} catch (err) {
-				setIsError(true);
-				setErrorMessage(err);
-			} finally {
-				setIsLoading(false);
-			}
-		}
+  useEffect(() => {
+    const fetchCast = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/${movieId}/credits`,
+          {
+            headers: {
+              Authorization: 'Bearer api_read_access_token'
+            }
+          }
+        );
+        setCast(response.data.cast);
+      } catch (error) {
+        console.error('Error fetching cast:', error);
+      }
+    };
 
-		fetchCast();
-	}, [movieId]);
+    fetchCast();
+  }, [movieId]);
 
-	return (
-		<>
-			{isLoading && <Loader />}
-			{isError ? (
-				<ErrorMessage message={errorMessage} />
-			) : (
-				<ul className={css.castList}>
-					{castValue &&
-						Array.isArray(castValue) &&
-						castValue.map((cast, index) => {
-							return (
-								<li className={css.castItem} key={`${cast.id}_${index}`}>
-									<CastCard cast={cast} />
-								</li>
-							);
-						})}
-				</ul>
-			)}
-		</>
-	);
-};
+  return (
+    <div>
+      <h2>Cast</h2>
+      <ul>
+        {cast.map(actor => (
+          <li key={actor.id}>
+            <img
+              src={`https://image.tmdb.org/t/p/w500/${actor.profile_path}`}
+              alt={actor.name}
+            />
+            <p>{actor.name}</p>
+            <p>Character: {actor.character}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default MovieCast;

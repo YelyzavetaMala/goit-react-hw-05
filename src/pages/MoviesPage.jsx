@@ -1,50 +1,65 @@
-
 import { useState } from 'react';
+import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import MovieList from '../components/MovieList';
+import MovieDetailsPage from './MovieDetailsPage';
+import NotFoundPage from './NotFoundPage';
 
 function MoviesPage() {
-  const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const { path } = useRouteMatch();
+  const history = useHistory();
 
-  const handleChange = event => {
-    setQuery(event.target.value);
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
 
-  const handleSubmit = async event => {
+  const handleSearchSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
     try {
-      if (query.trim() === '') return;
-      const response = await axios.get('https://api.themoviedb.org/3/search/movie', {
-        params: {
-          api_key: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NWZjM2E4ZjMyNWZiYzM4OTBlYTE4NWFlZDY2MmY4MSIsInN1YiI6IjY2MDZhNmNjYTZkZGNiMDE3YzQ1NDYyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IkM_fvkRIan3HJ9puXyJ8yBOKxi3QWE2A2yPgiEuWws', 
-          query: query
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${searchQuery}`,
+        {
+          headers: {
+            Authorization: 'Bearer api_read_access_token'
+          }
         }
-      });
-      setMovies(response.data.results);
-      setLoading(false);
+      );
+      setSearchResults(response.data.results);
     } catch (error) {
-      setError(error.message);
-      setLoading(false);
+      console.error('Error searching movies:', error);
     }
   };
 
+  const handleGoBack = () => {
+    history.goBack();
+  };
+
   return (
-     <div>
-      <h1>Search Movies</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={query} onChange={handleChange} />
+    <div>
+      <h2>Search Movies</h2>
+      <form onSubmit={handleSearchSubmit}>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchInputChange}
+        />
         <button type="submit">Search</button>
       </form>
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error}</div>}
-      <MovieList movieList={movies} />
+
+      <button onClick={handleGoBack}>Go Back</button>
+
+      <Switch>
+        <Route exact path={path}>
+          <MovieList movies={searchResults} />
+        </Route>
+        <Route path={`${path}/:movieId`} component={MovieDetailsPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
     </div>
   );
 }
 
 export default MoviesPage;
-       
