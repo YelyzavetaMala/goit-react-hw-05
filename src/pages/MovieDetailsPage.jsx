@@ -1,9 +1,18 @@
-import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-const MovieDetailsPage = () => {
-  const { movieId } = useParams();
+function MovieDetailsPage() {
+  const history = useHistory();
 
-  return <div>Movie Details Page - Movie ID: {movieId}</div>;
-};
+  const handleGoBack = () => {
+    history.goBack(); 
+  };
+
+  return (
+    <div>
+      <h1>Movie Details Page</h1>
+      <button onClick={handleGoBack}>Go Back</button>
+    </div>
+  );
+}
 
 export default MovieDetailsPage;

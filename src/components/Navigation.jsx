@@ -1,18 +1,18 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-const Navigation = () => {
+function Navigation() {
   return (
     <nav>
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          <NavLink exact={true.toString()} to="/">Home</NavLink>
         </li>
         <li>
-          <Link to="/movies">Movies</Link>
+          <NavLink to="/movies">Movies</NavLink>
         </li>
       </ul>
     </nav>
   );
-};
+}
 
 export default Navigation;
