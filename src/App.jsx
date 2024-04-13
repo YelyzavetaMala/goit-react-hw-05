@@ -12,8 +12,8 @@ const MovieReviews = lazy(() => import("./components/MovieReviews"));
 
 function App() {
   return (
+    <Navigation />
     <Suspense fallback={<div>Loading...</div>}>
-      <Navigation />
     <Routes>
        <Route path="/" element={<HomePage />} />
 					<Route path="/movies" element={<MoviesPage />} />

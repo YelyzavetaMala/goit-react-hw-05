@@ -1,14 +1,11 @@
 import { useState } from 'react';
-import { Switch, Route, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MovieList from '../components/MovieList';
-import MovieDetailsPage from './MovieDetailsPage';
-import NotFoundPage from './NotFoundPage';
 
 function MoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const location = useLocation();
+ 
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -50,13 +47,7 @@ function MoviesPage() {
 
       <button onClick={handleGoBack}>Go Back</button>
 
-      <Switch>
-        <Route exact path={location.pathname}>
-          <MovieList movies={searchResults} />
-        </Route>
-        <Route path={`${location.pathname}/:movieId`} component={MovieDetailsPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <MovieList movies={searchResults} />
     </div>
   );
 }
