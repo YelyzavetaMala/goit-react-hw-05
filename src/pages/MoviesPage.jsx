@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 import axios from 'axios';
 import MovieList from '../components/MovieList';
 import MovieDetailsPage from './MovieDetailsPage';
