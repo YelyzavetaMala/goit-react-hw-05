@@ -1,10 +1,15 @@
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function MovieDetailsPage() {
-  const history = useHistory();
+  const location = useLocation();
 
   const handleGoBack = () => {
-    history.goBack(); 
+    const { state } = location;
+    if (state && state.from) {
+      history.push(state.from);
+    } else {
+      history.goBack();
+    }
   };
 
   return (
