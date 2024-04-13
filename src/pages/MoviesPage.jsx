@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MovieList from '../components/MovieList';
 import MovieDetailsPage from './MovieDetailsPage';
@@ -9,8 +8,7 @@ import NotFoundPage from './NotFoundPage';
 function MoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const { path } = useRouteMatch();
-  const history = useHistory();
+  const location = useLocation();
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -23,7 +21,7 @@ function MoviesPage() {
         `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${searchQuery}`,
         {
           headers: {
-            Authorization: 'Bearer api_read_access_token'
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NWZjM2E4ZjMyNWZiYzM4OTBlYTE4NWFlZDY2MmY4MSIsInN1YiI6IjY2MDZhNmNjYTZkZGNiMDE3YzQ1NDYyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IkM_fvkRIan3HJ9puXyJ8yBOKxi3QWE2A2yPgiEuWws'
           }
         }
       );
@@ -53,10 +51,10 @@ function MoviesPage() {
       <button onClick={handleGoBack}>Go Back</button>
 
       <Switch>
-        <Route exact path={path}>
+        <Route exact path={location.pathname}>
           <MovieList movies={searchResults} />
         </Route>
-        <Route path={`${path}/:movieId`} component={MovieDetailsPage} />
+        <Route path={`${location.pathname}/:movieId`} component={MovieDetailsPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </div>
