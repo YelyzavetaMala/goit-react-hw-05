@@ -1,10 +1,9 @@
 import { useRef, useEffect } from 'react'; 
-import { useLocation, useHistory, useParams } from 'react-router-dom'; 
+import { useLocation, useParams } from 'react-router-dom'; 
 import axios from 'axios';
 
 function MovieDetailsPage() {
   const location = useLocation();
-  const history = useHistory();
   const params = useParams(); 
   const goBackButtonRef = useRef(null); 
 
