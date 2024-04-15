@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, useLocation, useParams, Outlet } from "react-router-dom";
 import axios from "axios";
 
 function MovieDetailsPage() {
@@ -14,6 +14,9 @@ function MovieDetailsPage() {
   }, [params]);
 
   const pathGoBack = useRef(location.state ?? "/movies");
+
+  const [movieDetails, setMovieDetails] = useState(null);
+
   const fetchMovieDetails = async (movieId) => {
     try {
       const response = await axios.get(
@@ -25,16 +28,23 @@ function MovieDetailsPage() {
           },
         }
       );
-      console.log("Movie details:", response.data);
+      setMovieDetails(response.data);
     } catch (error) {
       console.error("Error fetching movie details:", error);
     }
   };
 
+  if (!movieDetails) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <h1>Movie Details Page</h1>
-      <Link to={pathGoBack.current}>Go Back</Link>
+      <NavLink to={pathGoBack.current}>Go Back</NavLink>
+      <h2>{movieDetails.title}</h2>
+      <p>{movieDetails.overview}</p>
+      <Outlet />
     </div>
   );
 }
