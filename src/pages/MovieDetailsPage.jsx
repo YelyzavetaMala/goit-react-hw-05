@@ -1,11 +1,11 @@
-import { useRef, useEffect } from 'react'; 
-import { useLocation, useParams } from 'react-router-dom'; 
+import { useEffect } from 'react'; 
+import { useLocation, useParams, useHistory } from 'react-router-dom'; 
 import axios from 'axios';
 
 function MovieDetailsPage() {
   const location = useLocation();
   const params = useParams(); 
-  const goBackButtonRef = useRef(null); 
+  const history = useHistory();
 
 useEffect(() => {
     const { movieId } = params;
@@ -42,7 +42,7 @@ useEffect(() => {
   return (
     <div>
       <h1>Movie Details Page</h1>
-      <button ref={goBackButtonRef} onClick={handleGoBack}>Go Back</button> 
+      <button onClick={handleGoBack}>Go Back</button> 
     </div>
   );
 }

@@ -6,36 +6,25 @@ import MovieList from '../components/MovieList';
 function MoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [trendingMovies, setTrendingMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
- 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   
-   useEffect(() => {
+    useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
       try {
-        const trendingResponse = await axios.get(
-          'https://api.themoviedb.org/3/trending/movie/day',
-          {
-            headers: {
+        if (searchParams.has('query')) {
+          const query = searchParams.get('query');
+          const response = await axios.get(
+            `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${query}`,
+            {
+              headers: {
               Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NWZjM2E4ZjMyNWZiYzM4OTBlYTE4NWFlZDY2MmY4MSIsInN1YiI6IjY2MDZhNmNjYTZkZGNiMDE3YzQ1NDYyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IkM_fvkRIan3HJ9puXyJ8yBOKxi3QWE2A2yPgiEuWws'
             }
           }
         );
-        setTrendingMovies(trendingResponse.data.results);
+        setSearchResults(response.data.results);
 
-        if (searchParams.has('query')) {
-          const searchQuery = searchParams.get('query');
-          const searchResponse = await axios.get(
-            `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${searchQuery}`,
-            {
-              headers: {
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NWZjM2E4ZjMyNWZiYzM4OTBlYTE4NWFlZDY2MmY4MSIsInN1YiI6IjY2MDZhNmNjYTZkZGNiMDE3YzQ1NDYyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IkM_fvkRIan3HJ9puXyJ8yBOKxi3QWE2A2yPgiEuWws'
-              }
-            }
-          );
-          setSearchResults(searchResponse.data.results);
         }
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -45,7 +34,7 @@ function MoviesPage() {
     };
 
     fetchMovies();
-  }, [searchParams]); 
+  }, [searchParams]);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -53,7 +42,7 @@ function MoviesPage() {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    searchParams.set('query', searchQuery);
+    setSearchParams({ query: searchQuery });
     setSearchQuery('');
   };
 
@@ -69,9 +58,6 @@ function MoviesPage() {
         />
         <button type="submit">Search</button>
       </form>
-
-      <h2>Trending Movies</h2>
-      <MovieList movies={trendingMovies} />
 
       <h2>Search Results</h2>
       {isLoading ? (
