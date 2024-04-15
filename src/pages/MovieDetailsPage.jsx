@@ -1,12 +1,10 @@
 import { useEffect } from 'react'; 
-import { useLocation, useParams} from 'react-router-dom';
-import { useHistory } from 'react-router-dom'; 
+import { useLocation, useParams } from 'react-router-dom'; 
 import axios from 'axios';
 
 function MovieDetailsPage() {
   const location = useLocation();
   const params = useParams(); 
-  const history = useHistory();
 
 useEffect(() => {
     const { movieId } = params;
