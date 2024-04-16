@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function MovieReviews() {
   const { movieId } = useParams();
@@ -14,9 +14,10 @@ function MovieReviews() {
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/${movieId}/reviews`,
           {
-            params: {
-              api_key: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NWZjM2E4ZjMyNWZiYzM4OTBlYTE4NWFlZDY2MmY4MSIsInN1YiI6IjY2MDZhNmNjYTZkZGNiMDE3YzQ1NDYyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IkM_fvkRIan3HJ9puXyJ8yBOKxi3QWE2A2yPgiEuWws' 
-            }
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NWZjM2E4ZjMyNWZiYzM4OTBlYTE4NWFlZDY2MmY4MSIsInN1YiI6IjY2MDZhNmNjYTZkZGNiMDE3YzQ1NDYyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IkM_fvkRIan3HJ9puXyJ8yBOKxi3QWE2A2yPgiEuWws",
+            },
           }
         );
         setReviews(response.data.results);
@@ -37,7 +38,7 @@ function MovieReviews() {
     <div>
       <h2>Movie Reviews</h2>
       <ul>
-        {reviews.map(review => (
+        {reviews.map((review) => (
           <li key={review.id}>
             <p>Author: {review.author}</p>
             <p>{review.content}</p>

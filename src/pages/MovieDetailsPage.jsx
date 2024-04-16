@@ -40,9 +40,12 @@ function MovieDetailsPage() {
 
   return (
     <div>
-      <h1>Movie Details Page</h1>
       <NavLink to={pathGoBack.current}>Go Back</NavLink>
       <h2>{movieDetails.title}</h2>
+      <img
+        src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
+        alt={movieDetails.title}
+      />
       <p>{movieDetails.overview}</p>
       <ul>
         <li>
