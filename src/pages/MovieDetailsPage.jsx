@@ -44,6 +44,14 @@ function MovieDetailsPage() {
       <NavLink to={pathGoBack.current}>Go Back</NavLink>
       <h2>{movieDetails.title}</h2>
       <p>{movieDetails.overview}</p>
+      <ul>
+        <li>
+          <NavLink to={`/movies/${params.movieId}/cast`}>Cast</NavLink>
+        </li>
+        <li>
+          <NavLink to={`/movies/${params.movieId}/reviews`}>Reviews</NavLink>
+        </li>
+      </ul>
       <Outlet />
     </div>
   );

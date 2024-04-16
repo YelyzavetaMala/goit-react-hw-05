@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function MovieList() {
-  const [movies] = useState([]);
+function MovieList({ movies }) {
   const location = useLocation();
 
   return (
